@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- ========================= SECCIÓN CONTENIDO ========================= -->
+<section class="section-content padding-y" style="min-height:84vh; background: #f8f8f8;">
+  <div class="d-flex justify-content-center align-items-center" style="min-height: 84vh;">
+    <div class="w-100" style="max-width: 480px;">
+      <h1 class="text-center mb-5" style="font-size: 3rem; font-weight: 500; letter-spacing: 1px;">Crear Cuenta</h1>
+      {% include 'includes/alerts.html' %}
+      <form action="{% url 'registrar' %}" method="POST" class="mb-3">
+        {% csrf_token %}
+        <div class="mb-4">
+          {{ formulario.first_name.errors }}
+          <input type="text" name="first_name" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="Nombre" value="{{ formulario.first_name.value|default_if_none:'' }}" required>
+        </div>
+        <div class="mb-4">
+          {{ formulario.last_name.errors }}
+          <input type="text" name="last_name" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="Apellido" value="{{ formulario.last_name.value|default_if_none:'' }}" required>
+        </div>
+        <div class="mb-4">
+          {{ formulario.email.errors }}
+          <input type="email" name="email" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="Correo electrónico" value="{{ formulario.email.value|default_if_none:'' }}" required>
+        </div>
+        <div class="mb-4">
+          {{ formulario.phone.errors }}
+          <input type="text" name="phone" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="Teléfono" value="{{ formulario.phone.value|default_if_none:'' }}" required>
+        </div>
+        <div class="mb-4">
+          {{ formulario.password.errors }}
+          <input type="password" name="password" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="contrasena" required>
+        </div>
+        <div class="mb-4">
+          {{ formulario.confirmar_password.errors }}
+          <input type="password" name="confirmar_password" class="form-control form-control-lg border-0 px-4 py-3"
+            style="background: #ededed; border-radius: 25px; font-size: 1.1rem; text-align: center;"
+            placeholder="Repetir contrasena" required>
+        </div>
+        <div class="d-flex justify-content-center mb-3">
+          <button type="submit" class="btn"
+            style="background: #ff2424; color: #fff; font-size:1.15rem; border-radius: 25px; padding: 11px 0; width: 60%; font-weight: 500;">
+            Crear cuenta
+          </button>
+        </div>
+        {{ formulario.non_field_errors }}
+      </form>
+
+      <div class="text-center mt-3">
+        <span style="font-size: 1.07rem;">¿Ya tienes una cuenta?</span>
+        <a href="{% url 'iniciar_sesion' %}" class="btn"
+          style="background: #ff2424; color: #fff; font-size:1.07rem; border-radius: 25px; padding: 6px 24px; margin-left: 8px;">Iniciar
+          sesión</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ========================= FIN SECCIÓN CONTENIDO ========================= -->
+{% endblock %}

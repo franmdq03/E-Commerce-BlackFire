@@ -1,0 +1,58 @@
+{% load static %}
+
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-danger shadow-sm">
+    <div class="container-fluid">
+      <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center me-4">
+        <img src="{% static 'images/blackfire.svg' %}" alt="Logo" style="height: 55px; width: auto;">
+        <span class="ms-2 fw-bold">Blackfire Sexshop</span>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse ms-3" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center" style="gap: 20px;">
+          <li class="nav-item">
+            <a href="{% url 'tienda' %}" class="nav-link text-white fw-semibold">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link text-white fw-semibold">Comunidad</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'vista_contacto' %}" class="nav-link text-white fw-semibold">Contacto</a>
+          </li>
+        </ul>
+
+        <form action="{% url 'buscar' %}" method="GET" class="position-relative d-flex mx-lg-3 my-2 my-lg-0"
+          style="max-width: 350px; width: 100%;">
+          <input type="text" name="keyword" class="form-control rounded-pill border-0 ps-5"
+            style="background-color: rgba(255,255,255,0.15); color: white;" placeholder="Buscar productos...">
+          <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-white">
+            <i class="fas fa-search"></i>
+          </span>
+        </form>
+
+
+        <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0" style="gap: 10px;">
+          {% if not user.is_authenticated %}
+          <a href="{% url 'iniciar_sesion' %}" class="btn btn-light fw-normal rounded-pill px-3 py-2">
+            Iniciar sesión / Registrarse
+          </a>
+          {% else %}
+          <a href="{% url 'panel' %}" class="btn btn-light fw-normal rounded-pill px-3 py-2">
+            {{ user.nombre|default:'Mi cuenta' }}
+          </a>
+          {% endif %}
+          <a href="{% url 'carrito' %}"
+            class="btn btn-outline-light fw-normal rounded-circle p-2 d-flex align-items-center justify-content-center"
+            style="width: 40px; height: 40px;">
+            <i class="fa fa-shopping-cart"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

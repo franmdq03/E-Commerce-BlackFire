@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content py-5" style="background-color: #f8f9fa;">
+  <div class="container">
+    <div class="row">
+      <!-- Información de contacto -->
+      <div class="col-md-5 mb-4">
+        <h2 class="mb-4">Contacto</h2>
+        <p><strong>Horario:</strong> Todos los días de 9 a 19 hs.</p>
+        <p>
+          <a href="https://wa.me/5492235824610" target="_blank" rel="noopener noreferrer"
+            style="text-decoration: none; color: inherit;">
+            <img src="{% static 'images/icons/whatsapp-negro.png' %}" alt="Ícono WhatsApp"
+              style="width:20px; height:20px; margin-right:10px;">
+            5492235824610
+          </a>
+        </p>
+        <p>
+          <a href="mailto:garfra03@gmail.com" style="text-decoration: none; color: inherit;">
+            <img src="{% static 'images/icons/correo.png' %}" alt="Ícono correo"
+              style="width:20px; height:20px; margin-right:10px;">
+            garfra03@gmail.com
+          </a>
+        </p>
+        <p>
+          <img src="{% static 'images/icons/ubicacion.png' %}" alt="Ícono ubicación"
+            style="width:20px; height:20px; margin-right:10px; vertical-align: middle;">
+          Luro e Independencia, Local 112 Galeria Central (1° piso) - Mar del Plata
+        </p>
+      </div>
+
+      <!-- Formulario de contacto -->
+      <div class="col-md-7">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body">
+            <h4 class="card-title mb-4">Escríbenos</h4>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="post" novalidate>
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+                {{ form.nombre }}
+                {% for error in form.nombre.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.correo.id_for_label }}">{{ form.correo.label }}</label>
+                {{ form.correo }}
+                {% for error in form.correo.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+                {{ form.telefono }}
+                {% for error in form.telefono.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                <label for="{{ form.mensaje.id_for_label }}">{{ form.mensaje.label }}</label>
+                {{ form.mensaje }}
+                {% for error in form.mensaje.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <button type="submit" class="btn btn-dark w-100">Enviar mensaje</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

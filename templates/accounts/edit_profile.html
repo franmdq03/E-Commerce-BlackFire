@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section-conten padding-y bg">
+    {% include 'includes/alerts.html' %}
+    <div class="container">
+        <div class="row">
+            {% include 'includes/dashboard_sidebar.html' %}
+            <main class="col-md-9">
+                <article class="card">
+                    <header class="card-header">
+                        <strong class="d-inline-block mr-3">Editar tu perfil</strong>
+                    </header>
+                    <div class="card-body">
+                        <div class="text-right">
+                            {% if perfil_usuario.profile_picture %}
+                                <img src="{{ perfil_usuario.profile_picture.url }}" alt="Foto de perfil" width="100" style="border-radius:50px;">
+                            {% else %}
+                                <img src="/media/default-profile.png" alt="Foto de perfil" width="100" style="border-radius:50px;">
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form action="{% url 'editar_perfil' %}" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Nombre</label>
+                                            {{ formulario_usuario.first_name }}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Apellido</label>
+                                            {{ formulario_usuario.last_name }}
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label>Teléfono</label>
+                                            {{ formulario_usuario.phone }}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Foto de perfil</label>
+                                            {{ formulario_perfil.profile_picture }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dirección 1</label>
+                                        {{ formulario_perfil.address_1 }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Dirección 2</label>
+                                        {{ formulario_perfil.address_2 }}
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Ciudad</label>
+                                            {{ formulario_perfil.city }}
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Provincia</label>
+                                            {{ formulario_perfil.province }}
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>País</label>
+                                            {{ formulario_perfil.country }}
+                                        </div>
+                                    </div>
+                                    <input type="submit" value="Guardar" class="btn btn-primary">
+                                </form>
+                            </div>
+                        </div> <!-- row.// -->
+                    </div> <!-- card-body .// -->
+                </article> <!-- order-group.// -->
+            </main>
+        </div> <!-- row.// -->
+    </div>
+</section>
+{% endblock %}

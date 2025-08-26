@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="section-content padding-y bg">
+    <div class="container">
+        <div class="card">
+            <div class="row no-gutters">
+
+                <!-- IMAGEN PRINCIPAL + GALERÍA -->
+                <aside class="col-md-6">
+                    <article class="gallery-wrap">
+                        <div class="img-big-wrap mainImage mb-3">
+                            <center>
+                                <img src="{{ producto_unico.imagen.url }}" class="img-fluid" alt="{{ producto_unico.nombre_producto }}">
+                            </center>
+                        </div>
+
+                        {% if galeria_producto %}
+                        <ul class="thumb d-flex justify-content-center flex-wrap">
+                            <li>
+                                <a href="{{ producto_unico.imagen.url }}" target="mainImage">
+                                    <img src="{{ producto_unico.imagen.url }}" class="img-thumbnail m-1" style="height:80px;">
+                                </a>
+                            </li>
+                            {% for i in galeria_producto %}
+                            <li>
+                                <a href="{{ i.imagen.url }}" target="mainImage">
+                                    <img src="{{ i.imagen.url }}" class="img-thumbnail m-1" style="height:80px;">
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                    </article>
+                </aside>
+
+                <!-- INFORMACIÓN DEL PRODUCTO -->
+                <main class="col-md-6 border-left">
+                    <form action="{% url 'agregar_al_carrito' producto_unico.id %}" method="POST">
+                        {% csrf_token %}
+                        <article class="content-body">
+                            <h2 class="title">{{ producto_unico.nombre_producto }}</h2>
+
+                            {% if producto_unico.marca %}
+                                <h6 class="text-muted">Marca: {{ producto_unico.marca }}</h6>
+                            {% endif %}
+
+                            <div class="mb-3 mt-2">
+                                <var class="price h4 text-primary">$ {{ producto_unico.precio }}</var>
+                            </div>
+
+                            <p>{{ producto_unico.detalle }}</p>
+
+                            <hr>
+
+                            {% if producto_unico.stock > 0 %}
+                                <!-- Solo input numérico sin JS -->
+                                <div class="mb-3">
+                                    <label for="cantidad">Cantidad:</label>
+                                    <input type="number" name="cantidad" id="cantidad" value="1" min="1" max="{{ producto_unico.stock }}" class="form-control w-25 d-inline-block">
+                                    <button type="submit" class="btn btn-dark ml-2">Agregar al carrito</button>
+                                </div>
+
+                                <p class="text-success font-weight-bold">¡Agregá este producto y tenés envío gratis!</p>
+
+                                <!-- Solo "Medios de envío" -->
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-truck mr-2"></i>
+                                    <span><strong>Medios de envío</strong></span>
+                                    <span class="ml-auto">+</span>
+                                </div>
+
+                            {% else %}
+                                <h5 class="text-danger">Sin stock</h5>
+                            {% endif %}
+                        </article>
+                    </form>
+                </main>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+

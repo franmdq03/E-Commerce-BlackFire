@@ -1,0 +1,12 @@
+<aside class="col-md-3">
+  <!--   SIDEBAR   -->
+  <ul class="list-group">
+    <a class="list-group-item {% if '/accounts/' == request.path %}active{% endif %}" href="{% url 'panel' %}"> Panel </a>
+    <a class="list-group-item {% if '/mis_ordenes/' in request.path %}active{% endif %}" href="{% url 'mis_ordenes' %}"> Mis Órdenes </a>
+    <a class="list-group-item {% if '/editar_perfil/' in request.path %}active{% endif %}" href="{% url 'editar_perfil' %}"> Editar Perfil </a>
+    <a class="list-group-item {% if '/cambiar_contrasena/' in request.path %}active{% endif %}" href="{% url 'cambiar_contrasena' %}"> Cambiar contrasena </a>
+  </ul>
+  <br>
+  <a class="btn btn-light btn-block" href="{% url 'cerrar_sesion' %}"> <i class="fa fa-power-off"></i> <span class="text">Cerrar sesión</span> </a>
+  <!--   SIDEBAR .//END   -->
+</aside>

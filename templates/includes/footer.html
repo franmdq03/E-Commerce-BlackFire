@@ -1,0 +1,62 @@
+{% load static %}
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="section-footer" style="position: relative;background:#D65F7A; border:0; padding:0;">
+  <div class="container-fluid px-0">
+    <div class="row py-2" style="align-items: flex-start; font-size: 0.95rem;">
+      <!-- Logo y redes -->
+      <div class="col-md-3 text-center text-md-left mb-3 mb-md-0" style="padding-left:30px;">
+        <img src="{% static './images/blackfire.png' %}" alt="Black Fire"
+          style="width:70px; border-radius:50%; background:#fff; padding:4px;">
+        <div class="mt-2 mb-1" style="font-size:1.2rem; font-weight:500;">Black Fire</div>
+        <div class="fw-bold" style="font-size:1rem;">Síguenos</div>
+        <div class="d-flex justify-content-center justify-content-md-start mt-2" style="gap:12px; font-size:1.5rem;">
+          <a href="#" class="text-dark"><i class="fab fa-facebook"></i></a>
+          <a href="https://www.instagram.com/sexshop_blackfire/" class="text-dark" target="_blank" rel="noopener">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-dark"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="text-dark"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="text-dark"><i class="fab fa-x-twitter"></i></a>
+        </div>
+      </div>
+
+      <!-- Métodos de pago -->
+      <div class="col-md-3 text-center mb-3 mb-md-0">
+        <div class="mb-2" style="font-size:1rem;"><strong>Métodos de Pago</strong></div>
+        <div class="d-flex flex-wrap justify-content-center" style="gap:10px;">
+          <img src="{% static 'images/icons/pay-mastercard.png' %}" alt="Mastercard"
+            style="height:30px; width:55px; border:1px solid #666; border-radius:8px; background:#fff;">
+          <img src="{% static 'images/icons/mercado-pago.png' %}" alt="MercadoPago"
+            style="height:30px; width:55px; border:1px solid #666; border-radius:8px; background:#fff;">
+          <img src="{% static 'images/icons/pay-visa.png' %}" alt="Visa"
+            style="height:30px; width:55px; border:1px solid #666; border-radius:8px; background:#fff;">
+          <img src="{% static 'images/icons/pay-american-ex.png' %}" alt="American Express"
+            style="height:30px; width:55px; border:1px solid #666; border-radius:8px; background:#fff;">
+        </div>
+      </div>
+
+      <!-- Ayuda -->
+      <div class="col-md-3 text-center text-md-left mb-3 mb-md-0">
+        <div class="mb-2" style="font-size:1rem;"><strong>Ayuda</strong></div>
+        <div>Envíos</div>
+        <div>Problema de pagos</div>
+      </div>
+
+      <!-- Categoría -->
+      <div class="col-md-3 text-center text-md-left">
+        <div class="mb-2" style="font-size:1rem;"><strong>Categoría</strong></div>
+        <div>Novedades</div>
+        <div>Vibradores</div>
+        <div>Succionadores</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WhatsApp flotante a la derecha, fuera del row -->
+  <div style="position: absolute; bottom: 0; right: 0; padding: 10px;">
+    <a href="https://wa.me/5492234266165" target="_blank" rel="noopener" title="Escríbenos por WhatsApp">
+      <img src="{% static 'images/icons/whatsapp.png' %}" alt="WhatsApp" style="width:60px; height:60px;">
+    </a>
+  </div>
+</footer>
