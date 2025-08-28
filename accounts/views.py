@@ -16,6 +16,9 @@ from carts.views import _id_carrito
 from carts.models import Carrito, ItemCarrito
 import requests
 
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def registrar(request):
     if request.method == "POST":
@@ -74,7 +77,7 @@ def registrar(request):
     return render(request, "accounts/register.html", contexto)
 
 
-
+@csrf_exempt
 def iniciar_sesion(request):
     if request.method == "POST":
         correo = request.POST.get("correo")

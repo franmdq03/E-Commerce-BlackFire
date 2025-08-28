@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from store.models import Producto
 from .models import Carrito, ItemCarrito
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.csrf import csrf_exempt
 
 def _id_carrito(request):
     carrito = request.session.session_key
     if not carrito:
         carrito = request.session.create()
     return carrito
-
+@csrf_exempt
 def agregar_al_carrito(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
 
@@ -78,7 +79,7 @@ def quitar_item_carrito(request, producto_id):
         pass
     return redirect('carrito')
 
-
+@csrf_exempt
 def carrito(request, total=0, cantidad=0, items_carrito=None):
     try:
         if request.user.is_authenticated:

@@ -11,6 +11,8 @@ from .mercado_pago import crear_preferencia_mp
 import mercadopago
 from django.conf import settings
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
 
 def pagos(request):
     # Enviar correo de confirmación de pedido al cliente
@@ -32,7 +34,7 @@ def pagos(request):
     }
     return JsonResponse(data)
 
-
+@csrf_exempt
 @login_required(login_url='iniciar_sesion')
 def realizar_pedido(request, total=0, cantidad=0):
     usuario_actual = request.user
@@ -119,9 +121,11 @@ def realizar_pedido(request, total=0, cantidad=0):
 
 sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
+# ...existing code...
+@csrf_exempt
 @login_required(login_url="iniciar_sesion")
 def pedido_completo(request):
-    numero_orden = request.GET.get("numero_orden")
+    numero_orden = request.GET.get("external_reference")  # Mercado Pago envía esto
     payment_id = request.GET.get("payment_id")
 
     if not numero_orden or not payment_id:
@@ -180,4 +184,5 @@ def pedido_completo(request):
 
     except Orden.DoesNotExist:
         return redirect("home")
+# ...existing code...
 
