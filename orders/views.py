@@ -37,6 +37,7 @@ def pagos(request):
 @csrf_exempt
 @login_required(login_url='iniciar_sesion')
 def realizar_pedido(request, total=0, cantidad=0):
+
     usuario_actual = request.user
     items_carrito = ItemCarrito.objects.filter(usuario=usuario_actual, activo=True)
     cantidad_carrito = items_carrito.count()
@@ -121,7 +122,6 @@ def realizar_pedido(request, total=0, cantidad=0):
 
 sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
-# ...existing code...
 @csrf_exempt
 @login_required(login_url="iniciar_sesion")
 def pedido_completo(request):
@@ -163,7 +163,13 @@ def pedido_completo(request):
                         precio_producto=item.producto.precio
                     )
 
-                items.delete()
+                    # Descontar stock del producto
+                    producto = item.producto
+                    producto.stock -= item.cantidad
+                    producto.save()
+
+                # Vaciar carrito
+                items.delete()    
 
             productos_ordenados = ProductoOrdenado.objects.filter(orden=orden)
             subtotal = sum(i.precio_producto * i.cantidad for i in productos_ordenados)
@@ -184,5 +190,5 @@ def pedido_completo(request):
 
     except Orden.DoesNotExist:
         return redirect("home")
-# ...existing code...
+
 

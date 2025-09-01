@@ -9,9 +9,9 @@ def crear_preferencia_mp(orden, items):
     preference_data = {
         "items": [],
         "back_urls": {
-            "success": "https://b9375e52cf41.ngrok-free.app/orders/pedido_completo/",
-            "failure": "https://b9375e52cf41.ngrok-free.app/store",
-            "pending": "https://b9375e52cf41.ngrok-free.app/store",
+            "success": "https://118c2186930f.ngrok-free.app/orders/pedido_completo/",
+            "failure": "https://118c2186930f.ngrok-free.app/store",
+            "pending": "https://118c2186930f.ngrok-free.app/store",
         },
         "auto_return": "approved",  # esto indica que redirige automáticamente si es aprobado
         "payment_methods": {
