@@ -8,4 +8,5 @@ urlpatterns = [
     path('marca/<slug:marca_slug>/', views.tienda, name='productos_por_marca'),
     path('categoria/<slug:categoria_slug>/<slug:producto_slug>/', views.detalle_producto, name='detalle_producto'),
     path('buscar/', views.buscar, name='buscar'),
+    path("comunidad/", views.comunidad, name="comunidad"),
 ]

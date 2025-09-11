@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- Sección Misión -->
+    <section class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Nuestra Misión</h2>
+        <p class="lead mt-3">
+            Brindar experiencias únicas de placer, confianza y autodescubrimiento,
+            ofreciendo productos eróticos de calidad, asesoramiento personalizado
+            y un espacio seguro e inclusivo donde cada persona pueda explorar su
+            sexualidad sin prejuicios.
+        </p>
+    </section>
+
+    <!-- Sección Visión -->
+    <section class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Nuestra Visión</h2>
+        <p class="lead mt-3">
+            Ser el sexshop líder en la costa atlántica y expandirnos a nivel nacional,
+            destacándonos por la innovación, la discreción y la cercanía con nuestros
+            clientes, transformando la manera en que se vive y se conversa sobre el placer.
+        </p>
+    </section>
+
+    <!-- Sección Valores con íconos -->
+    <section class="mb-5">
+        <h2 class="text-center display-5 fw-bold mb-4">Nuestros Valores</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-shield-lock display-4 text-danger mb-3"></i>
+                    <h5 class="card-title">Confianza y Discreción</h5>
+                    <p class="card-text">
+                        Respetamos la intimidad de cada cliente,
+                        garantizando un espacio seguro y confidencial.
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-people-fill display-4 text-primary mb-3"></i>
+                    <h5 class="card-title">Inclusión y Diversidad</h5>
+                    <p class="card-text">
+                        Celebramos todas las formas de amar, sentir y disfrutar, sin prejuicios ni etiquetas.
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-hand-thumbs-up-fill display-4 text-success mb-3"></i>
+                    <h5 class="card-title">Cercanía y Acompañamiento</h5>
+                    <p class="card-text">
+                        Escuchamos, asesoramos y guiamos con empatía, generando experiencias personalizadas.
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-stars display-4 text-warning mb-3"></i>
+                    <h5 class="card-title">Innovación y Calidad</h5>
+                    <p class="card-text">
+                        Seleccionamos productos modernos y de excelencia para ofrecer lo mejor del mercado erótico.
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-book-fill display-4 text-info mb-3"></i>
+                    <h5 class="card-title">Educación y Bienestar Sexual</h5>
+                    <p class="card-text">
+                        Promovemos una sexualidad consciente, saludable y libre, derribando tabúes.
+                    </p>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm p-3">
+                    <i class="bi bi-heart-fill display-4 text-danger mb-3"></i>
+                    <h5 class="card-title">Pasión y Compromiso</h5>
+                    <p class="card-text">
+                        Vivimos nuestro trabajo con entusiasmo, energía y la determinación de llevar el placer a otro
+                        nivel.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Imagen de Comunidad -->
+    <section class="text-center">
+        <img src="{% static 'images/foto-pestaña_comunidad.jpg' %}" alt="Comunidad Black Fire"
+            class="img-fluid rounded shadow-lg" style="max-width: 60%; height: auto;" loading="lazy">
+    </section>
+
+</div>
+{% endblock %}

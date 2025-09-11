@@ -110,3 +110,6 @@ def buscar(request):
         "cantidad_productos": cantidad_productos,
     }
     return render(request, "store/store.html", contexto)
+
+def comunidad(request):
+    return render(request, "comunidad/comunidad.html")
