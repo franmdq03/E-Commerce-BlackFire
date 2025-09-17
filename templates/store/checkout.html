@@ -16,73 +16,60 @@
               {% csrf_token %}
               {{ formulario.non_field_errors }}
 
-              <div class="form-row">
-                <div class="col form-group">
-                  {{ formulario.nombre.label_tag }}
-                  {{ formulario.nombre }}
-                  {{ formulario.nombre.errors }}
-                </div>
-                <div class="col form-group">
-                  {{ formulario.apellido.label_tag }}
-                  {{ formulario.apellido }}
-                  {{ formulario.apellido.errors }}
-                </div>
+              <div class="form-group">
+                {{ formulario.nombre.label_tag }}
+                {{ formulario.nombre }}
+                {{ formulario.nombre.errors }}
               </div>
-
-              <div class="form-row">
-                <div class="col form-group">
-                  {{ formulario.correo.label_tag }}
-                  {{ formulario.correo }}
-                  {{ formulario.correo.errors }}
-                </div>
-                <div class="col form-group">
-                  {{ formulario.telefono.label_tag }}
-                  {{ formulario.telefono }}
-                  {{ formulario.telefono.errors }}
-                </div>
+              <div class="form-group">
+                {{ formulario.apellido.label_tag }}
+                {{ formulario.apellido }}
+                {{ formulario.apellido.errors }}
               </div>
-
-              <div class="form-row">
-                <div class="col form-group">
-                  {{ formulario.direccion_1.label_tag }}
-                  {{ formulario.direccion_1 }}
-                  {{ formulario.direccion_1.errors }}
-                </div>
-                <div class="col form-group">
-                  {{ formulario.direccion_2.label_tag }}
-                  {{ formulario.direccion_2 }}
-                  {{ formulario.direccion_2.errors }}
-                </div>
+              <div class="form-group">
+                {{ formulario.correo.label_tag }}
+                {{ formulario.correo }}
+                {{ formulario.correo.errors }}
               </div>
-
-              <div class="form-row">
-                <div class="col form-group">
-                  {{ formulario.ciudad.label_tag }}
-                  {{ formulario.ciudad }}
-                  {{ formulario.ciudad.errors }}
-                </div>
-                <div class="col form-group">
-                  {{ formulario.provincia.label_tag }}
-                  {{ formulario.provincia }}
-                  {{ formulario.provincia.errors }}
-                </div>
-                <div class="col form-group">
-                  {{ formulario.pais.label_tag }}
-                  {{ formulario.pais }}
-                  {{ formulario.pais.errors }}
-                </div>
+              <div class="form-group">
+                {{ formulario.telefono.label_tag }}
+                {{ formulario.telefono }}
+                {{ formulario.telefono.errors }}
               </div>
-
-              <div class="form-row">
+              <div class="form-group">
+                {{ formulario.direccion_1.label_tag }}
+                {{ formulario.direccion_1 }}
+                {{ formulario.direccion_1.errors }}
+              </div>
+              <div class="form-group">
+                {{ formulario.direccion_2.label_tag }}
+                {{ formulario.direccion_2 }}
+                {{ formulario.direccion_2.errors }}
+              </div>
+              <div class="form-group">
+                {{ formulario.ciudad.label_tag }}
+                {{ formulario.ciudad }}
+                {{ formulario.ciudad.errors }}
+              </div>
+              <div class="form-group">
+                {{ formulario.provincia.label_tag }}
+                {{ formulario.provincia }}
+                {{ formulario.provincia.errors }}
+              </div>
+              <div class="form-group">
+                {{ formulario.pais.label_tag }}
+                {{ formulario.pais }}
+                {{ formulario.pais.errors }}
+              </div>
+              <div class="form-group">
                 {{ formulario.nota_orden.label_tag }}
                 {{ formulario.nota_orden }}
                 {{ formulario.nota_orden.errors }}
               </div>
 
           </div>
-        </div> <!-- card.// -->
-
-      </aside> <!-- col.// -->
+        </div>
+      </aside>
 
       <aside class="col-lg-6">
         <div class="card">
@@ -129,32 +116,32 @@
 
             <hr>
             <h5>Opciones de Entrega</h5>
-            <label>
-              <input type="radio" name="tipo_entrega" value="domicilio" {% if formulario.tipo_entrega.value == 'domicilio' %}checked{% endif %}>
-              Envío a domicilio
-            </label>
-            <label>
-              <input type="radio" name="tipo_entrega" value="retiro_local" {% if formulario.tipo_entrega.value == 'retiro_local' %}checked{% endif %}>
-              Retiro en local
-            </label>
+            <div class="form-group">
+              <label>
+                <input type="radio" name="tipo_entrega" value="domicilio" {% if formulario.tipo_entrega.value == 'domicilio' %}checked{% endif %}>
+                Envío a domicilio
+              </label>
+              <label>
+                <input type="radio" name="tipo_entrega" value="retiro_local" {% if formulario.tipo_entrega.value == 'retiro_local' %}checked{% endif %}>
+                Retiro en local
+              </label>
+            </div>
 
             <div id="campos_domicilio" style="margin-top:15px;">
-              <div class="form-row">
-                <div class="col form-group">
-                  <label for="id_direccion_envio">Dirección de envío</label>
-                  {{ formulario.direccion_envio }}
-                  {{ formulario.direccion_envio.errors }}
-                </div>
-                <div class="col form-group">
-                  <label for="id_ciudad_envio">Ciudad de envío</label>
-                  {{ formulario.ciudad_envio }}
-                  {{ formulario.ciudad_envio.errors }}
-                </div>
-                <div class="col form-group">
-                  <label for="id_cp_envio">Código Postal</label>
-                  {{ formulario.cp_envio }}
-                  {{ formulario.cp_envio.errors }}
-                </div>
+              <div class="form-group">
+                <label for="id_direccion_envio">Dirección de envío</label>
+                {{ formulario.direccion_envio }}
+                {{ formulario.direccion_envio.errors }}
+              </div>
+              <div class="form-group">
+                <label for="id_ciudad_envio">Ciudad de envío</label>
+                {{ formulario.ciudad_envio }}
+                {{ formulario.ciudad_envio.errors }}
+              </div>
+              <div class="form-group">
+                <label for="id_cp_envio">Código Postal</label>
+                {{ formulario.cp_envio }}
+                {{ formulario.cp_envio.errors }}
               </div>
 
               {% if cotizacion_envio %}

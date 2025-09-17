@@ -6,23 +6,76 @@ TIPO_ENTREGA = (
 )
 
 class FormularioOrden(forms.Form):
-    nombre = forms.CharField(max_length=100, required=True)
-    apellido = forms.CharField(max_length=100, required=True)
-    correo = forms.EmailField(required=True)
-    telefono = forms.CharField(max_length=20, required=True)
-    direccion_1 = forms.CharField(max_length=255, required=False)
-    direccion_2 = forms.CharField(max_length=255, required=False)
-    ciudad = forms.CharField(max_length=100, required=False)
-    provincia = forms.CharField(max_length=100, required=False)
-    pais = forms.CharField(max_length=100, required=False)
-    nota_orden = forms.CharField(widget=forms.Textarea, required=False)
+    nombre = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    apellido = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    correo = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={"class": "form-control"})
+    )
+    telefono = forms.CharField(
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    direccion_1 = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    direccion_2 = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    ciudad = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    provincia = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    pais = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    nota_orden = forms.CharField(
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+        required=False
+    )
     
-    tipo_entrega = forms.ChoiceField(choices=TIPO_ENTREGA, widget=forms.RadioSelect)
+    tipo_entrega = forms.ChoiceField(
+        choices=TIPO_ENTREGA,
+        widget=forms.RadioSelect(attrs={"class": "form-check-input"})
+    )
     
     # Campos para envío a domicilio
-    direccion_envio = forms.CharField(max_length=255, required=False)
-    ciudad_envio = forms.CharField(max_length=100, required=False)
-    cp_envio = forms.CharField(max_length=20, required=False)
+    direccion_envio = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    ciudad_envio = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
+    cp_envio = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"})
+    )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -36,5 +89,6 @@ class FormularioOrden(forms.Form):
                 self.add_error('ciudad_envio', 'Este campo es obligatorio para envío a domicilio.')
             if not cleaned_data.get('cp_envio'):
                 self.add_error('cp_envio', 'Este campo es obligatorio para envío a domicilio.')
+
 
 
