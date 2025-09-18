@@ -47,13 +47,18 @@
                                 <tr>
                                     <td>
                                         <figure class="itemside align-items-center">
-                                            <div class="aside"><img src="{{ item_carrito.producto.imagen.url }}" class="img-sm"></div>
+                                            <div class="aside">
+                                                <img src="{{ item_carrito.producto.imagen.url }}" class="img-sm">
+                                            </div>
                                             <figcaption class="info">
-                                                <a href="{{ item_carrito.producto.get_url }}" class="title text-dark">{{ item_carrito.producto.nombre_producto }}</a>
+                                                <a href="{{ item_carrito.producto.get_url }}" class="title text-dark">
+                                                    {{ item_carrito.producto.nombre_producto }}
+                                                </a>
                                                 <p class="text-muted small">
                                                     {% if item_carrito.variaciones.all %}
                                                     {% for item in item_carrito.variaciones.all %}
-                                                    {{ item.categoria_variacion | capfirst }} : {{ item.valor_variacion | capfirst }} <br>
+                                                    {{ item.categoria_variacion | capfirst }} : {{ item.valor_variacion
+                                                    | capfirst }} <br>
                                                     {% endfor %}
                                                     {% endif %}
                                                 </p>
@@ -61,7 +66,7 @@
                                         </figure>
                                     </td>
                                     <td>
-                                        <label for="">{{item_carrito.cantidad}}</label>
+                                        <label>{{item_carrito.cantidad}}</label>
                                     </td>
                                     <td>
                                         <div class="price-wrap">
@@ -76,17 +81,10 @@
                     </div>
                 </div>
             </aside>
+
             <aside class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
-                        <dl class="dlist-align">
-                            <dt>Precio total:</dt>
-                            <dd class="text-right">$ {{total}}</dd>
-                        </dl>
-                        <dl class="dlist-align">
-                            <dt>Impuesto:</dt>
-                            <dd class="text-right"> $ {{impuesto}}</dd>
-                        </dl>
                         <dl class="dlist-align">
                             <dt>Total general:</dt>
                             <dd class="text-right text-dark b"><strong>$ {{total_general}}</strong></dd>
@@ -101,14 +99,14 @@
                     </div>
                 </div>
                 <div class="alert alert-danger" role="alert">
-                  <b>Atención: </b>Este es un sitio de demostración. No intentes realizar pagos reales.
+                    <b>Atención: </b>Este es un sitio de demostración. No intentes realizar pagos reales.
                 </div>
             </aside>
+
         </div>
         <!-- ============================ COMPONENT 1 END .// ================================= -->
     </div>
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
 
 <script>
     function getCookie(name) {
@@ -132,18 +130,15 @@
     var orderID = "{{order.numero_orden}}"
     var payment_method = 'PayPal'
     var redirect_url = "{% url 'order_complete' %}"
-    // Render the PayPal button into #paypal-button-container
-    paypal.Buttons({
 
+    paypal.Buttons({
         style: {
             color: 'blue',
             shape: 'rect',
             label: 'pay',
             height: 40
         },
-
-        // Set up the transaction
-        createOrder: function(data, actions) {
+        createOrder: function (data, actions) {
             return actions.order.create({
                 purchase_units: [{
                     amount: {
@@ -152,15 +147,13 @@
                 }]
             });
         },
-
-        // Finalize the transaction
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
                 console.log(details);
                 sendData();
-                function sendData(){
-					fetch(url, {
-                        method : "POST",
+                function sendData() {
+                    fetch(url, {
+                        method: "POST",
                         headers: {
                             "Content-type": "application/json",
                             "X-CSRFToken": csrftoken,
@@ -172,10 +165,10 @@
                             status: details.status,
                         }),
                     })
-                  .then((response) => response.json())
-                  .then((data) => {
-                        window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
-                    });
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
+                        });
                 }
             });
         }

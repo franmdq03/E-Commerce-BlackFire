@@ -7,8 +7,9 @@
   <div class="container">
 
     <div class="row">
+      <!-- DIRECCIÓN DE FACTURACIÓN -->
       <aside class="col-lg-6">
-        <div class="card">
+        <div class="card mb-3 shadow-sm">
           <div class="card-body">
             <h4 class="card-title mb-4">Dirección de facturación</h4>
 
@@ -16,166 +17,174 @@
               {% csrf_token %}
               {{ formulario.non_field_errors }}
 
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.nombre.label_tag }}
                 {{ formulario.nombre }}
                 {{ formulario.nombre.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.apellido.label_tag }}
                 {{ formulario.apellido }}
                 {{ formulario.apellido.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.correo.label_tag }}
                 {{ formulario.correo }}
                 {{ formulario.correo.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.telefono.label_tag }}
                 {{ formulario.telefono }}
                 {{ formulario.telefono.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.direccion_1.label_tag }}
                 {{ formulario.direccion_1 }}
                 {{ formulario.direccion_1.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.direccion_2.label_tag }}
                 {{ formulario.direccion_2 }}
                 {{ formulario.direccion_2.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.ciudad.label_tag }}
                 {{ formulario.ciudad }}
                 {{ formulario.ciudad.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.provincia.label_tag }}
                 {{ formulario.provincia }}
                 {{ formulario.provincia.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.pais.label_tag }}
                 {{ formulario.pais }}
                 {{ formulario.pais.errors }}
               </div>
-              <div class="form-group">
+              <div class="form-group mb-2">
                 {{ formulario.nota_orden.label_tag }}
                 {{ formulario.nota_orden }}
                 {{ formulario.nota_orden.errors }}
               </div>
-
           </div>
         </div>
       </aside>
 
+      <!-- PRODUCTOS Y ENTREGA -->
       <aside class="col-lg-6">
-        <div class="card">
+        <div class="card mb-3 shadow-sm">
           <div class="card-body">
 
-            <table class="table table-borderless table-shopping-cart">
-              <thead class="text-muted">
-                <tr class="small text-uppercase">
-                  <th scope="col">Producto</th>
-                  <th scope="col" width="120">Cantidad</th>
-                  <th scope="col" width="120">Precio</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item_carrito in items_carrito %}
-                <tr>
-                  <td>
-                    <figure class="itemside align-items-center">
-                      <div class="aside"><img src="{{ item_carrito.producto.imagen.url }}" class="img-sm"></div>
-                      <figcaption class="info">
-                        <a href="{{ item_carrito.producto.get_url }}" class="title text-dark">
-                          {{ item_carrito.producto.nombre_producto }}</a>
-                        <p class="text-muted small">
-                          {% if item_carrito.variaciones.all %}
-                          {% for item in item_carrito.variaciones.all %}
-                          {{ item.categoria_variacion | capfirst }} : {{ item.valor_variacion | capfirst }} <br>
-                          {% endfor %}
-                          {% endif %}
-                        </p>
-                      </figcaption>
-                    </figure>
-                  </td>
-                  <td><label>{{ item_carrito.cantidad }}</label></td>
-                  <td>
-                    <div class="price-wrap">
-                      <var class="price">$ {{ item_carrito.subtotal }}</var>
-                      <small class="text-muted">$ {{ item_carrito.producto.precio }} c/u </small>
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-
-            <hr>
-            <h5>Opciones de Entrega</h5>
-            <div class="form-group">
-              <label>
-                <input type="radio" name="tipo_entrega" value="domicilio" {% if formulario.tipo_entrega.value == 'domicilio' %}checked{% endif %}>
-                Envío a domicilio
-              </label>
-              <label>
-                <input type="radio" name="tipo_entrega" value="retiro_local" {% if formulario.tipo_entrega.value == 'retiro_local' %}checked{% endif %}>
-                Retiro en local
-              </label>
+            <!-- Productos -->
+            <div class="card mb-3 shadow-sm">
+              <div class="card-header bg-light">
+                <h5 class="mb-0">Productos en tu carrito</h5>
+              </div>
+              <div class="card-body p-2">
+                <table class="table table-borderless mb-0">
+                  <thead class="text-muted small text-uppercase">
+                    <tr>
+                      <th>Producto</th>
+                      <th width="120">Cantidad</th>
+                      <th width="120">Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item_carrito in items_carrito %}
+                    <tr>
+                      <td>
+                        <figure class="itemside align-items-center">
+                          <div class="aside"><img src="{{ item_carrito.producto.imagen.url }}" class="img-sm rounded"></div>
+                          <figcaption class="info">
+                            <a href="{{ item_carrito.producto.get_url }}" class="title text-dark">{{ item_carrito.producto.nombre_producto }}</a>
+                            <p class="text-muted small mb-0">
+                              {% if item_carrito.variaciones.all %}
+                                {% for item in item_carrito.variaciones.all %}
+                                  {{ item.categoria_variacion | capfirst }} : {{ item.valor_variacion | capfirst }}<br>
+                                {% endfor %}
+                              {% endif %}
+                            </p>
+                          </figcaption>
+                        </figure>
+                      </td>
+                      <td><span class="badge bg-secondary">{{ item_carrito.cantidad }}</span></td>
+                      <td>
+                        <div class="price-wrap">
+                          <var class="price fw-bold">$ {{ item_carrito.subtotal }}</var>
+                          <small class="text-muted d-block">$ {{ item_carrito.producto.precio }} c/u</small>
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
-            <div id="campos_domicilio" style="margin-top:15px;">
-              <div class="form-group">
-                <label for="id_direccion_envio">Dirección de envío</label>
-                {{ formulario.direccion_envio }}
-                {{ formulario.direccion_envio.errors }}
-              </div>
-              <div class="form-group">
-                <label for="id_ciudad_envio">Ciudad de envío</label>
-                {{ formulario.ciudad_envio }}
-                {{ formulario.ciudad_envio.errors }}
-              </div>
-              <div class="form-group">
-                <label for="id_cp_envio">Código Postal</label>
-                {{ formulario.cp_envio }}
-                {{ formulario.cp_envio.errors }}
+            <!-- Opciones de entrega -->
+            <div class="card mb-3 shadow-sm p-3">
+              <h5>Opciones de entrega</h5>
+              <div class="d-flex gap-3 mb-2">
+                <label class="form-check-label">
+                  <input class="form-check-input me-2" type="radio" name="tipo_entrega" value="domicilio" {% if formulario.tipo_entrega.value == 'domicilio' %}checked{% endif %}>
+                  Envío a domicilio
+                </label>
+                <label class="form-check-label">
+                  <input class="form-check-input me-2" type="radio" name="tipo_entrega" value="retiro_local" {% if formulario.tipo_entrega.value == 'retiro_local' %}checked{% endif %}>
+                  Retiro en local
+                </label>
               </div>
 
-              {% if cotizacion_envio %}
-              <div class="alert alert-info my-3">
-                <strong>Costo de envío Correo Argentino:</strong> ${{ cotizacion_envio.costo }}
-                <br>
-                <span class="small text-muted">Tiempo estimado: {{ cotizacion_envio.tiempo_entrega }}</span>
+              <div id="campos_domicilio" class="mt-2">
+                <div class="mb-2">
+                  {{ formulario.direccion_envio.label_tag }}
+                  {{ formulario.direccion_envio }}
+                  {{ formulario.direccion_envio.errors }}
+                </div>
+                <div class="mb-2">
+                  {{ formulario.ciudad_envio.label_tag }}
+                  {{ formulario.ciudad_envio }}
+                  {{ formulario.ciudad_envio.errors }}
+                </div>
+                <div class="mb-2">
+                  {{ formulario.cp_envio.label_tag }}
+                  {{ formulario.cp_envio }}
+                  {{ formulario.cp_envio.errors }}
+                </div>
+
+                {% if cotizacion_envio %}
+                <div class="alert alert-info my-2 small">
+                  <strong>Costo de envío:</strong> ${{ cotizacion_envio.costo }}<br>
+                  <span class="text-muted">Tiempo estimado: {{ cotizacion_envio.tiempo_entrega }}</span>
+                </div>
+                {% endif %}
+
+                <button type="submit" name="calcular_envio" class="btn btn-info btn-sm mt-2" id="btn_calcular_envio">Calcular envío</button>
               </div>
-              {% endif %}
             </div>
 
-            <script>
-              document.addEventListener("DOMContentLoaded", function () {
-                const radios = document.querySelectorAll('input[name="tipo_entrega"]');
-                const campos = document.getElementById("campos_domicilio");
+            <!-- Método de pago -->
+            <div class="card mb-3 shadow-sm p-3">
+              <h5>Método de pago</h5>
+              <div class="d-flex gap-4">
+                <label class="form-check-label">
+                  <input class="form-check-input me-2" type="radio" name="metodo" value="tarjeta" checked>
+                  Tarjeta de crédito
+                </label>
+                <label class="form-check-label">
+                  <input class="form-check-input me-2" type="radio" name="metodo" value="debito">
+                  Débito / Dinero en cuenta
+                </label>
+              </div>
+            </div>
 
-                function toggleCampos() {
-                  const seleccionado = document.querySelector('input[name="tipo_entrega"]:checked').value;
-                  campos.style.display = (seleccionado === "domicilio") ? "block" : "none";
-                }
+            <!-- Botones -->
+            <div class="d-flex gap-2">
+              <button name="realizar_pedido" type="submit" class="btn btn-primary flex-fill">Realizar pedido</button>
+              <a href="{% url 'tienda' %}" class="btn btn-outline-secondary flex-fill">Continuar comprando</a>
+            </div>
 
-                radios.forEach(radio => {
-                  radio.addEventListener("change", toggleCampos);
-                });
-
-                toggleCampos();
-              });
-            </script>
-
-            <button type="submit" name="calcular_envio" class="btn btn-info btn-block mt-3">Calcular envío</button>
-            <button name="realizar_pedido" type="submit" class="btn btn-primary btn-block mt-3">Realizar pedido</button>
-            <a href="{% url 'tienda' %}" class="btn btn-light btn-block mt-2">Continuar comprando</a>
-
-            </form>
           </div>
         </div>
       </aside>
@@ -183,5 +192,27 @@
 
   </div>
 </section>
+
+<!-- JS para mostrar/ocultar campos de domicilio -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const radios = document.querySelectorAll('input[name="tipo_entrega"]');
+  const campos = document.getElementById("campos_domicilio");
+  const btnCalcular = document.getElementById("btn_calcular_envio");
+
+  function toggleCampos() {
+    const seleccionado = document.querySelector('input[name="tipo_entrega"]:checked').value;
+    const mostrarDomicilio = (seleccionado === "domicilio");
+    campos.style.display = mostrarDomicilio ? "block" : "none";
+    btnCalcular.style.display = mostrarDomicilio ? "block" : "none";
+  }
+
+  radios.forEach(radio => {
+    radio.addEventListener("change", toggleCampos);
+  });
+
+  toggleCampos();
+});
+</script>
 
 {% endblock %}

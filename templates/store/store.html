@@ -37,8 +37,7 @@
               class="accordion-collapse collapse {% if categoria_seleccionada or subcategoria_seleccionada %}show{% endif %}">
               <div class="accordion-body px-3 py-2">
                 <ul class="list-unstyled mb-0">
-
-                  <!-- Link a todos los productos -->
+                  <!-- Todos los productos -->
                   <li class="mb-2">
                     <a href="{% url 'tienda' %}"
                       class="text-decoration-none d-block {% if not categoria_seleccionada %}fw-bold text-primary{% else %}text-dark{% endif %}">
@@ -46,26 +45,26 @@
                     </a>
                   </li>
 
-                  <!-- Iterar categorías -->
                   {% for categoria in categorias %}
                   {% if categoria.subcategoria is None %}
                   <li class="mb-2">
+                    <!-- Categoría principal -->
                     <a href="{% url 'productos_por_categoria' categoria.slug %}"
                       class="text-decoration-none d-block {% if categoria.slug == categoria_seleccionada %}fw-bold text-primary{% else %}text-dark{% endif %}">
                       {{ categoria.nombre_categoria }}
                     </a>
 
                     {% if categoria.subcategorias.all %}
-                    <div class="mt-2">
-                      <div class="mt-2 d-flex flex-wrap gap-2">
-                        {% for sub in categoria.subcategorias.all %}
+                    <ul class="list-unstyled ps-3 mt-2">
+                      {% for sub in categoria.subcategorias.all %}
+                      <li>
                         <a href="{% url 'productos_por_subcategoria' categoria.slug sub.slug %}"
-                          class="subcategoria {% if sub.slug == subcategoria_seleccionada %}fw-bold text-primary{% endif %}">
+                          class="text-decoration-none d-block subcategoria-link {% if sub.slug == subcategoria_seleccionada %}active-subcategoria{% endif %}">
                           {{ sub.nombre_categoria }}
                         </a>
-                        {% endfor %}
-                      </div>
-                    </div>
+                      </li>
+                      {% endfor %}
+                    </ul>
                     {% endif %}
                   </li>
                   {% endif %}
