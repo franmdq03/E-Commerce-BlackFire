@@ -1,3 +1,11 @@
+"""
+Modelos para la app 'category'.
+
+Define:
+- Categoria: categorías principales de productos, con slug, imagen y fecha de creación/actualización.
+- Subcategoria: subcategorías relacionadas a una categoría, permitiendo organizar productos jerárquicamente.
+"""
+
 from django.urls import reverse
 from django.db import models
 

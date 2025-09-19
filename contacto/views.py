@@ -1,12 +1,34 @@
+"""
+Vistas para la app 'contacto'.
+
+Contienen la lógica para mostrar el formulario de contacto, 
+enviar el mensaje por correo y mostrar la página de éxito.
+"""
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import FormularioContacto  # Importamos el formulario renombrado
+from .forms import FormularioContacto
 from django.core.mail import send_mail
 from django.conf import settings
 
-# Create your views here.
-
 def vista_contacto(request):
+    """
+    Muestra y procesa el formulario de contacto.
+
+    Parámetros:
+    - request: objeto HttpRequest.
+
+    Flujo:
+    - Si el método es POST:
+        - Valida el formulario.
+        - Si es válido, extrae los datos y envía un correo al soporte.
+        - Muestra un mensaje de éxito y redirige a la página de éxito.
+    - Si el método es GET:
+        - Muestra el formulario vacío.
+
+    Retorna:
+    - Renderiza la plantilla 'contacto/contacto.html' con el formulario.
+    """
     if request.method == 'POST':
         form = FormularioContacto(request.POST)
         if form.is_valid():
@@ -21,7 +43,7 @@ def vista_contacto(request):
             send_mail(
                 asunto,
                 mensaje_email,
-                settings.DEFAULT_FROM_EMAIL,  # Remitente (el que configuraste)
+                settings.DEFAULT_FROM_EMAIL,  # Remitente configurado
                 ['soporte@tudominio.com'],   # Destinatario(s)
                 fail_silently=False,
             )
@@ -30,8 +52,18 @@ def vista_contacto(request):
             return redirect('contacto_exito')
     else:
         form = FormularioContacto()
+    
     return render(request, 'contacto/contacto.html', {'form': form})
 
 def vista_contacto_exito(request):
-    # Vista simple para mostrar un mensaje de éxito
+    """
+    Muestra la página de éxito tras enviar el formulario de contacto.
+
+    Parámetros:
+    - request: objeto HttpRequest.
+
+    Retorna:
+    - Renderiza la plantilla 'contacto/contacto_exito.html'.
+    """
     return render(request, 'contacto/contacto_exito.html')
+

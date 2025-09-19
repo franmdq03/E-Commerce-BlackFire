@@ -1,3 +1,11 @@
+"""
+Rutas de la app 'carts' del ecommerce.
+Define las URLs relacionadas con el carrito de compras, incluyendo:
+- Vista del carrito
+- Agregar productos
+- Quitar productos o cantidades
+"""
+
 from django.urls import path
 from . import views
 

@@ -1,14 +1,32 @@
+"""
+Vistas para la app 'store'.
+
+Incluye funciones para mostrar productos, detalles, búsqueda y página de comunidad.
+"""
+
 from django.shortcuts import render, get_object_or_404
 from .models import Producto, GaleriaProducto, Marca
 from category.models import Categoria
 from carts.models import ItemCarrito
 from django.db.models import Q
 from carts.views import _id_carrito
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.core.paginator import Paginator
 from orders.models import ProductoOrdenado
 
 
 def tienda(request, categoria_slug=None, subcategoria_slug=None, marca_slug=None):
+    """
+    Muestra los productos disponibles en la tienda.
+
+    Parámetros opcionales:
+    - categoria_slug: filtra productos por categoría.
+    - subcategoria_slug: filtra productos por subcategoría.
+    - marca_slug: filtra productos por marca.
+
+    Filtra también por rango de precio mediante parámetros GET 'min_precio' y 'max_precio'.
+    Implementa paginación de 9 productos por página.
+    Retorna render de 'store/store.html' con el contexto de productos y filtros.
+    """
     categorias = Categoria.objects.all()
     marcas = Marca.objects.all()
     productos = Producto.objects.filter(disponible=True)
@@ -62,8 +80,21 @@ def tienda(request, categoria_slug=None, subcategoria_slug=None, marca_slug=None
     return render(request, "store/store.html", contexto)
 
 
-
 def detalle_producto(request, categoria_slug, producto_slug):
+    """
+    Muestra el detalle de un producto específico.
+
+    Parámetros:
+    - categoria_slug: slug de la categoría del producto.
+    - producto_slug: slug del producto a mostrar.
+
+    Incluye:
+    - Verificación si el producto está en el carrito del usuario actual.
+    - Verificación si el usuario ya ha ordenado el producto.
+    - Galería de imágenes del producto.
+
+    Retorna render de 'store/product_detail.html' con contexto.
+    """
     try:
         producto_unico = Producto.objects.get(
             categoria__slug=categoria_slug, slug=producto_slug
@@ -96,6 +127,14 @@ def detalle_producto(request, categoria_slug, producto_slug):
 
 
 def buscar(request):
+    """
+    Permite buscar productos por palabra clave.
+
+    Parámetros GET:
+    - keyword: texto a buscar en nombre o detalle del producto.
+
+    Retorna render de 'store/store.html' con los resultados encontrados.
+    """
     productos = []
     cantidad_productos = 0
     if "keyword" in request.GET:
@@ -111,5 +150,12 @@ def buscar(request):
     }
     return render(request, "store/store.html", contexto)
 
+
 def comunidad(request):
+    """
+    Renderiza la página de comunidad.
+
+    Retorna render de 'comunidad/comunidad.html'.
+    """
     return render(request, "comunidad/comunidad.html")
+

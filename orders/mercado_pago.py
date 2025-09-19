@@ -1,91 +1,64 @@
+"""
+Módulo de integración con Mercado Pago.
+
+Define la función para crear una preferencia de pago a partir de una orden
+y sus items, utilizando el SDK oficial de Mercado Pago.
+"""
+
 import mercadopago
 from django.conf import settings
-from decimal import Decimal
 
+# Inicializa el SDK con el access token configurado en settings.py
 sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
+def crear_preferencia_mp(orden, items):
+    """
+    Crea una preferencia de pago en Mercado Pago para la orden proporcionada.
 
-def crear_preferencia_tarjeta(orden, items):
+    Parámetros:
+    - orden: instancia del modelo Orden que contiene la información de la orden.
+    - items: lista de objetos ItemOrden o similar, con producto, cantidad y precio.
+
+    Retorna:
+    - URL de init_point para redirigir al usuario a Mercado Pago para pagar.
+
+    Excepciones:
+    - Lanza Exception si no se puede crear la preferencia o no se obtiene 'init_point'.
+    """
+    # Estructura de la preferencia
     preference_data = {
         "items": [],
         "back_urls": {
-            "success": "https://f57fc3bae287.ngrok-free.app/orders/pedido_completo/",
-            "failure": "https://f57fc3bae287.ngrok-free.app/store",
-            "pending": "https://f57fc3bae287.ngrok-free.app/store",
+            "success": "https://7a27d56f09e5.ngrok-free.app/orders/pedido_completo/",
+            "failure": "https://7a27d56f09e5.ngrok-free.app/store",
+            "pending": "https://7a27d56f09e5.ngrok-free.app/store",
         },
-        "auto_return": "approved",
+        "auto_return": "approved",  # Retorno automático si se aprueba el pago
         "payment_methods": {
             "excluded_payment_types": [
-                {"id": "debit_card"},
-                {"id": "ticket"},
-                {"id": "atm"},
+                {"id": "ticket"},  # Excluye pagos tipo ticket
+                {"id": "atm"},     # Excluye pagos vía ATM
             ]
         },
-        "installments": 6,
-        "external_reference": str(orden.numero_orden),
+        "installments": 6,  # Número máximo de cuotas
+        "external_reference": str(orden.numero_orden),  # Referencia externa para identificar la orden
     }
 
+    # Agregar cada producto de la orden a la preferencia
     for item in items:
         preference_data["items"].append(
             {
                 "title": getattr(item.producto, "nombre_producto", "Producto"),
                 "quantity": item.cantidad,
-                "unit_price": float(item.producto.precio),  # Precio normal
+                "unit_price": float(item.producto.precio),
                 "currency_id": "ARS",
             }
         )
 
+    # Crear la preferencia usando el SDK
     preference_response = sdk.preference().create(preference_data)
 
-    if preference_response.get("status") == 201:
-        response = preference_response.get("response", {})
-        init_point = response.get("init_point")
-        if init_point:
-            return init_point
-        else:
-            raise Exception(
-                "No se encontró 'init_point' en la respuesta de Mercado Pago"
-            )
-    else:
-        raise Exception(
-            f"Error creando preferencia Mercado Pago: {preference_response}"
-        )
-
-
-def crear_preferencia_debito(orden, items):
-    preference_data = {
-        "items": [],
-        "back_urls": {
-            "success": "https://f57fc3bae287.ngrok-free.app/orders/pedido_completo/",
-            "failure": "https://f57fc3bae287.ngrok-free.app/store",
-            "pending": "https://f57fc3bae287.ngrok-free.app/store",
-        },
-        "auto_return": "approved",
-        "payment_methods": {
-            "excluded_payment_types": [
-                {"id": "credit_card"},
-                {"id": "ticket"},
-                {"id": "atm"},
-            ],
-        },
-        "installments": 1,
-        "external_reference": str(orden.numero_orden),
-    }
-
-    for item in items:
-        preference_data["items"].append(
-            {
-                "title": getattr(item.producto, "nombre_producto", "Producto"),
-                "quantity": item.cantidad,
-                "unit_price": float(
-                    item.producto.precio * Decimal("0.95")
-                ),  # 5% descuento para débito/cuenta
-                "currency_id": "ARS",
-            }
-        )
-
-    preference_response = sdk.preference().create(preference_data)
-
+    # Verificar que la creación fue exitosa
     if preference_response.get("status") == 201:
         response = preference_response.get("response", {})
         init_point = response.get("init_point")

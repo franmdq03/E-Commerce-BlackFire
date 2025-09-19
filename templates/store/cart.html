@@ -41,9 +41,9 @@
                           style="font-size:1.05rem;">{{ item.producto.nombre_producto }}</a>
                         <div class="text-muted small">
                           {% if item.variaciones.all %}
-                            {% for var in item.variaciones.all %}
-                              {{ var.categoria_variacion|capfirst }}: {{ var.valor_variacion|capfirst }}<br>
-                            {% endfor %}
+                          {% for var in item.variaciones.all %}
+                          {{ var.categoria_variacion|capfirst }}: {{ var.valor_variacion|capfirst }}<br>
+                          {% endfor %}
                           {% endif %}
                         </div>
                         <span class="text-secondary small">Precio: ${{ item.producto.precio }}</span>
@@ -62,8 +62,8 @@
                       <form action="{% url 'agregar_al_carrito' item.producto.id %}" method="POST" class="d-inline">
                         {% csrf_token %}
                         {% for var in item.variaciones.all %}
-                          <input type="hidden" name="{{ var.categoria_variacion|lower }}"
-                            value="{{ var.valor_variacion|capfirst }}">
+                        <input type="hidden" name="{{ var.categoria_variacion|lower }}"
+                          value="{{ var.valor_variacion|capfirst }}">
                         {% endfor %}
                         <button class="btn btn-outline-secondary border-0 p-1" type="submit" title="Aumentar cantidad"
                           style="font-size: 0.8rem; width:24px; height:24px;">
@@ -132,7 +132,9 @@
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-1">{{ producto.nombre_producto }}</h5>
               <p class="mb-2 text-muted" style="font-size:0.9em;">{{ producto.detalle|truncatechars:60|default:"Ver detalles completos" }}</p>
-              <div class="mb-2 fw-bold" style="font-size:1.1em;">${{ producto.precio }}</div>
+              <div class="mb-2 fw-bold" style="font-size:1.1em;">Precio de lista: ${{ producto.precio }}</div>
+              {% if producto.precio_efectivo %}<div class="text-success fw-semibold small">Efectivo: ${{ producto.precio_efectivo }}</div>
+              {% endif %}
               <div class="mt-auto d-flex gap-2 align-items-center">
                 <a href="{% url 'detalle_producto' producto.categoria.slug producto.slug %}"
                   class="btn btn-dark btn-sm d-flex align-items-center justify-content-center px-3">

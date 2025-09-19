@@ -1,7 +1,9 @@
 from django import forms
 from .models import Account, UserProfile
 
+# Formularios para la app "accounts": registro, edición de usuario y perfil
 class FormularioRegistro(forms.ModelForm):
+    """Formulario de registro de usuarios con validación de contraseña."""
     password = forms.CharField(
         label="contrasena",
         widget=forms.PasswordInput(attrs={
@@ -34,6 +36,7 @@ class FormularioRegistro(forms.ModelForm):
         }
 
     def clean(self):
+        """Valida que las contraseñas coincidan."""
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         confirmar = cleaned_data.get('confirmar_password')
@@ -41,12 +44,14 @@ class FormularioRegistro(forms.ModelForm):
             raise forms.ValidationError("¡Las contrasenas no coinciden!")
 
     def __init__(self, *args, **kwargs):
+        """Agrega clase 'form-control' a todos los campos para estilos."""
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
 
 class FormularioUsuario(forms.ModelForm):
+    """Formulario para editar información básica del usuario."""
     class Meta:
         model = Account
         fields = ('first_name', 'last_name', 'phone')
@@ -58,7 +63,7 @@ class FormularioUsuario(forms.ModelForm):
 
 
 class FormularioPerfilUsuario(forms.ModelForm):
-    # Cambiar foto_perfil por profile_picture
+    """Formulario para editar perfil de usuario, incluyendo foto."""
     profile_picture = forms.ImageField(
         required=False,
         error_messages={'invalid': "Solo archivos de imagen"},
@@ -73,4 +78,3 @@ class FormularioPerfilUsuario(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
-
