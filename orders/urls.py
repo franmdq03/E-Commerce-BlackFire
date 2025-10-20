@@ -16,4 +16,6 @@ urlpatterns = [
 
     # Vista de confirmación que se muestra cuando la orden/pago se completó correctamente
     path('pedido_completo/', views.pedido_completo, name='pedido_completo'),
+    
+    path('calcular_envio/', views.calcular_envio, name='calcular_envio'),
 ]

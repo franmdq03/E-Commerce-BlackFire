@@ -7,25 +7,16 @@ y sus items, utilizando el SDK oficial de Mercado Pago.
 
 import mercadopago
 from django.conf import settings
+from decimal import Decimal
 
 # Inicializa el SDK con el access token configurado en settings.py
 sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
 def crear_preferencia_mp(orden, items):
     """
-    Crea una preferencia de pago en Mercado Pago para la orden proporcionada.
-
-    Parámetros:
-    - orden: instancia del modelo Orden que contiene la información de la orden.
-    - items: lista de objetos ItemOrden o similar, con producto, cantidad y precio.
-
-    Retorna:
-    - URL de init_point para redirigir al usuario a Mercado Pago para pagar.
-
-    Excepciones:
-    - Lanza Exception si no se puede crear la preferencia o no se obtiene 'init_point'.
+    Crea una preferencia de pago en Mercado Pago para la orden proporcionada,
+    incluyendo el costo de envío como un ítem extra.
     """
-    # Estructura de la preferencia
     preference_data = {
         "items": [],
         "back_urls": {
@@ -33,42 +24,47 @@ def crear_preferencia_mp(orden, items):
             "failure": "https://7a27d56f09e5.ngrok-free.app/store",
             "pending": "https://7a27d56f09e5.ngrok-free.app/store",
         },
-        "auto_return": "approved",  # Retorno automático si se aprueba el pago
+        "auto_return": "approved",
         "payment_methods": {
             "excluded_payment_types": [
-                {"id": "ticket"},  # Excluye pagos tipo ticket
-                {"id": "atm"},     # Excluye pagos vía ATM
+                {"id": "ticket"},
+                {"id": "atm"},
             ]
         },
-        "installments": 6,  # Número máximo de cuotas
-        "external_reference": str(orden.numero_orden),  # Referencia externa para identificar la orden
+        "installments": 6,
+        "external_reference": str(orden.numero_orden),
     }
 
-    # Agregar cada producto de la orden a la preferencia
+    # Productos del carrito
+    total_productos = Decimal('0')
     for item in items:
-        preference_data["items"].append(
-            {
-                "title": getattr(item.producto, "nombre_producto", "Producto"),
-                "quantity": item.cantidad,
-                "unit_price": float(item.producto.precio),
-                "currency_id": "ARS",
-            }
-        )
+        unit_price = Decimal(str(item.producto.precio))
+        preference_data["items"].append({
+            "title": getattr(item.producto, "nombre_producto", "Producto"),
+            "quantity": item.cantidad,
+            "unit_price": float(unit_price),
+            "currency_id": "ARS",
+        })
+        total_productos += unit_price * item.cantidad
 
-    # Crear la preferencia usando el SDK
+    # Agregar costo de envío si existe
+    costo_envio = orden.total_orden - total_productos
+    if costo_envio > 0:
+        preference_data["items"].append({
+            "title": "Costo de envío",
+            "quantity": 1,
+            "unit_price": float(costo_envio),
+            "currency_id": "ARS",
+        })
+
+    # Crear preferencia con Mercado Pago
     preference_response = sdk.preference().create(preference_data)
 
-    # Verificar que la creación fue exitosa
     if preference_response.get("status") == 201:
-        response = preference_response.get("response", {})
-        init_point = response.get("init_point")
+        init_point = preference_response.get("response", {}).get("init_point")
         if init_point:
             return init_point
         else:
-            raise Exception(
-                "No se encontró 'init_point' en la respuesta de Mercado Pago"
-            )
+            raise Exception("No se encontró 'init_point' en la respuesta de Mercado Pago")
     else:
-        raise Exception(
-            f"Error creando preferencia Mercado Pago: {preference_response}"
-        )
+        raise Exception(f"Error creando preferencia Mercado Pago: {preference_response}")

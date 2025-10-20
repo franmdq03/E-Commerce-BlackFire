@@ -13,7 +13,7 @@
           <div class="card-body">
             <h4 class="card-title mb-4">Dirección de facturación</h4>
 
-            <form action="{% url 'realizar_pedido' %}" method="POST">
+            <form id="checkoutForm" action="{% url 'realizar_pedido' %}" method="POST">
               {% csrf_token %}
               {{ formulario.non_field_errors }}
 
@@ -67,6 +67,9 @@
                 {{ formulario.nota_orden }}
                 {{ formulario.nota_orden.errors }}
               </div>
+
+              <!-- Input oculto para costo de envío -->
+              <input type="hidden" id="input_costo_envio" name="costo_envio" value="0">
           </div>
         </div>
       </aside>
@@ -120,6 +123,11 @@
                   </tbody>
                 </table>
               </div>
+              <div>
+                <div class="text-end mt-3 border-top pt-2">
+                <h5 class="fw-bold">Total: $<span id="total_carrito">{{ total }}</span></h5>
+              </div>
+              </div>
             </div>
 
             <!-- Opciones de entrega -->
@@ -153,14 +161,14 @@
                   {{ formulario.cp_envio.errors }}
                 </div>
 
-                {% if cotizacion_envio %}
-                <div class="alert alert-info my-2 small">
-                  <strong>Costo de envío:</strong> ${{ cotizacion_envio.costo }}<br>
-                  <span class="text-muted">Tiempo estimado: {{ cotizacion_envio.tiempo_entrega }}</span>
+                <!-- 🔹 Resultado del cálculo -->
+                <div id="resultado_envio" class="alert alert-info my-2 small" style="display:none;">
+                  <strong>Costo de envío:</strong> $<span id="costo_envio"></span><br>
+                  <span class="text-muted">Tiempo estimado: 2-5 días</span>
                 </div>
-                {% endif %}
 
-                <button type="submit" name="calcular_envio" class="btn btn-info btn-sm mt-2" id="btn_calcular_envio">Calcular envío</button>
+                <button type="button" class="btn btn-info btn-sm mt-2" id="btn_calcular_envio">Calcular envío</button>
+              
               </div>
             </div>
 
@@ -178,26 +186,64 @@
   </div>
 </section>
 
-<!-- JS para mostrar/ocultar campos de domicilio -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const radios = document.querySelectorAll('input[name="tipo_entrega"]');
   const campos = document.getElementById("campos_domicilio");
   const btnCalcular = document.getElementById("btn_calcular_envio");
+  const resultado = document.getElementById("resultado_envio");
+  const costoEnvioSpan = document.getElementById("costo_envio");
+  const ciudadEnvioInput = document.getElementById("id_ciudad_envio");
+  const inputCostoEnvio = document.getElementById("input_costo_envio");
+  const totalCarritoSpan = document.getElementById("total_carrito");
+  const totalInicial = parseFloat(totalCarritoSpan.textContent);
 
   function toggleCampos() {
-    const seleccionado = document.querySelector('input[name="tipo_entrega"]:checked').value;
-    const mostrarDomicilio = (seleccionado === "domicilio");
+    const radioSeleccionado = document.querySelector('input[name="tipo_entrega"]:checked');
+    if (!radioSeleccionado) return;
+    const mostrarDomicilio = (radioSeleccionado.value === "domicilio");
     campos.style.display = mostrarDomicilio ? "block" : "none";
     btnCalcular.style.display = mostrarDomicilio ? "block" : "none";
+
+    // Si se cambia a retiro, reiniciamos costo de envío
+    if (!mostrarDomicilio) {
+      inputCostoEnvio.value = 0;
+      costoEnvioSpan.textContent = "0.00";
+      totalCarritoSpan.textContent = totalInicial.toFixed(2);
+      resultado.style.display = "none";
+    }
   }
 
-  radios.forEach(radio => {
-    radio.addEventListener("change", toggleCampos);
+  btnCalcular.addEventListener("click", async () => {
+    const ciudadDestino = ciudadEnvioInput.value.trim();
+    if (!ciudadDestino) {
+      alert("Por favor, ingresá una ciudad de destino.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/calcular_envio?destino=${encodeURIComponent(ciudadDestino)}`);
+      if (!response.ok) throw new Error("Error al obtener el costo de envío");
+      const data = await response.json();
+
+      costoEnvioSpan.textContent = data.costo_envio.toFixed(2);
+      inputCostoEnvio.value = data.costo_envio;
+
+      // Actualizar total sumando costo de envío
+      const totalConEnvio = totalInicial + data.costo_envio;
+      totalCarritoSpan.textContent = totalConEnvio.toFixed(2);
+
+      resultado.style.display = "block";
+    } catch (error) {
+      alert("No se pudo calcular el envío. Intentá nuevamente.");
+      console.error(error);
+    }
   });
 
+  radios.forEach(radio => radio.addEventListener("change", toggleCampos));
   toggleCampos();
 });
 </script>
 
 {% endblock %}
+

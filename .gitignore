@@ -1,2 +1,15 @@
 __pycache__/
 *.pyc
+
+# Archivos de la base de datos (por ejemplo, SQLite)
+*.sqlite3
+*.db
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+.venv/
+
+# Archivos de configuración sensibles
+.env

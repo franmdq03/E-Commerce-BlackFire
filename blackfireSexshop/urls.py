@@ -28,6 +28,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 
     # ORDERS
-    path('orders/', include('orders.urls')),
+    path('', include('orders.urls')),
     path('contacto/', include('contacto.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
