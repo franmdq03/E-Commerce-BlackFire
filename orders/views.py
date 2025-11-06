@@ -21,7 +21,7 @@ from django.http import JsonResponse
 
 from carts.models import ItemCarrito
 from .forms import FormularioOrden
-from .models import Orden, Pago, ProductoOrdenado
+from .models import Orden, Pago, ProductoOrdenado, BandaEnvio
 from .mercado_pago import crear_preferencia_mp
 from decimal import Decimal
 
@@ -229,17 +229,21 @@ def calcular_envio(request):
 
         distancia_km = osrm_data["routes"][0]["distance"] / 1000.0  # metros → km
 
-        # 3️⃣ Lógica de bandas (puedes ajustar los valores)
-        if distancia_km <= 5:
-            costo_envio = 0
-        elif distancia_km <= 15:
-            costo_envio = 1000
-        elif distancia_km <= 30:
-            costo_envio = 2500
-        elif distancia_km <= 60:
-            costo_envio = 4000
+        # 3️⃣ Lógica de bandas (dinámica desde la DB)      
+        bandas = BandaEnvio.objects.order_by('distancia_hasta')
+        if not bandas.exists():
+            # Si no hay bandas configuradas en el admin, retorna un error
+            return JsonResponse({'error': 'Los costos de envío no están configurados.'}, status=500)
+
+        costo_envio = 0
+        for banda in bandas:
+            if distancia_km <= banda.distancia_hasta:
+                costo_envio = banda.costo
+                break # Encuentra la primera banda que coincide y sale
         else:
-            costo_envio = 7000
+            # Si la distancia es mayor que todas las bandas (ej: 500km),
+            # usa el costo de la última banda configurada.
+            costo_envio = bandas.last().costo
 
         return JsonResponse({
             'costo_envio': costo_envio,

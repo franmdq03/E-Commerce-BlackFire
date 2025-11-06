@@ -96,3 +96,25 @@ class ProductoOrdenado(models.Model):
 
     def __str__(self):
         return self.producto.nombre_producto
+
+class BandaEnvio(models.Model):
+    """
+    Representa una banda de costo de envío basada en la distancia.
+    Se gestiona desde el panel de administración.
+    """
+    distancia_hasta = models.FloatField(
+        verbose_name="Distancia máxima (km)",
+        help_text="La distancia máxima en kilómetros para aplicar este costo."
+    )
+    costo = models.FloatField(
+        verbose_name="Costo de envío ($)"
+    )
+
+    class Meta:
+        verbose_name = "Banda de envío"
+        verbose_name_plural = "Bandas de envío"
+        # Importante para que la lógica de la vista funcione correctamente
+        ordering = ['distancia_hasta'] 
+
+    def __str__(self):
+        return f"Hasta {self.distancia_hasta} km: ${self.costo}"
