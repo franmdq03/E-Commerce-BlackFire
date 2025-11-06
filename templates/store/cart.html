@@ -139,9 +139,6 @@
                 {% endif %}
               </p>
               <div class="mb-2 fw-bold" style="font-size:1.1em;">Precio de lista: ${{ producto.precio }}</div>
-              {% if producto.precio_efectivo %}<div class="text-success fw-semibold small">Efectivo: ${{
-                producto.precio_efectivo }}</div>
-              {% endif %}
               <div class="mt-auto d-flex gap-2 align-items-center">
                 <a href="{% url 'detalle_producto' producto.categoria.slug producto.slug %}"
                   class="btn btn-dark btn-sm d-flex align-items-center justify-content-center px-3">

@@ -187,10 +187,6 @@
                 <!-- Precio -->
                 <div class="text-success fw-bold mb-2 fs-4">Precio de lista: ${{ producto.precio }}</div>
 
-                {% if producto.precio_efectivo %}
-                <div class="text-warning small">Efectivo: ${{ producto.precio_efectivo }}</div>
-                {% endif %}
-
                 <!-- Detalle -->
                 <div class="text-muted small mb-3" style="font-size: 0.9rem;">
                   {% if producto.detalle %}
