@@ -8,6 +8,7 @@ from store.models import Producto
 from .models import Carrito, ItemCarrito
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages 
 
 
 def _id_carrito(request):
@@ -25,31 +26,73 @@ def _id_carrito(request):
 def agregar_al_carrito(request, producto_id):
     """
     Agrega un producto al carrito.
+    - Valida que el producto tenga stock disponible.
     - Si el usuario está autenticado, el item se asocia a su cuenta.
-    - Si ya existe, aumenta la cantidad.
+    - Si ya existe, aumenta la cantidad validando el stock.
     """
     producto = get_object_or_404(Producto, id=producto_id)
-    cantidad = request.POST.get("cantidad") or 1
-    cantidad = int(cantidad)
+    cantidad_solicitada = request.POST.get("cantidad") or 1
+    cantidad_solicitada = int(cantidad_solicitada)
 
-    carrito, _ = Carrito.objects.get_or_create(id_carrito=_id_carrito(request))
+    # --- INICIO DE CORRECCIÓN ---
 
-    if request.user.is_authenticated:
-        item_carrito, creado = ItemCarrito.objects.get_or_create(
-            producto=producto,
-            usuario=request.user,
-            carrito=carrito,
-            defaults={"cantidad": cantidad},
+    # Valida que el producto esté disponible y tenga al menos 1 unidad de stock
+    if not producto.disponible or producto.stock <= 0:
+        #Enviar mensaje de error
+        messages.error(request, "Este producto no está disponible o no tiene stock.")
+        return redirect("carrito")
+
+    try:
+        carrito = Carrito.objects.get(id_carrito=_id_carrito(request))
+    except Carrito.DoesNotExist:
+        carrito = Carrito.objects.create(id_carrito=_id_carrito(request))
+
+    cantidad_existente = 0
+    item_carrito = None
+    try:
+        if request.user.is_authenticated:
+            item_carrito = ItemCarrito.objects.get(
+                producto=producto, usuario=request.user, carrito=carrito
+            )
+        else:
+            item_carrito = ItemCarrito.objects.get(
+                producto=producto, carrito=carrito
+            )
+        cantidad_existente = item_carrito.cantidad
+    except ItemCarrito.DoesNotExist:
+        pass
+
+    # 4. Validar el stock total deseado
+    cantidad_total_deseada = cantidad_existente + cantidad_solicitada
+
+    if producto.stock < cantidad_total_deseada:
+        # No hay suficiente stock
+        messages.error(
+            request,
+            f"No hay suficiente stock. Solo quedan {producto.stock} unidades."
         )
-    else:
-        item_carrito, creado = ItemCarrito.objects.get_or_create(
-            producto=producto, carrito=carrito, defaults={"cantidad": cantidad}
-        )
+        return redirect("carrito")
 
-    if not creado:
-        item_carrito.cantidad += cantidad
+    # 5. Crear o actualizar el item
+    if item_carrito:
+        # Si ya existía (encontrado en paso 3), actualizamos la cantidad
+        item_carrito.cantidad = cantidad_total_deseada
         item_carrito.save()
-
+    else:
+        # Si no existía, lo creamos con la cantidad solicitada
+        if request.user.is_authenticated:
+            ItemCarrito.objects.create(
+                producto=producto,
+                usuario=request.user,
+                carrito=carrito,
+                cantidad=cantidad_solicitada,
+            )
+        else:
+            ItemCarrito.objects.create(
+                producto=producto,
+                carrito=carrito,
+                cantidad=cantidad_solicitada,
+            )
     return redirect("carrito")
 
 

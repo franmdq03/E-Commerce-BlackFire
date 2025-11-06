@@ -193,10 +193,15 @@
 
                 <!-- Detalle -->
                 <div class="text-muted small mb-3" style="font-size: 0.9rem;">
-                  {{ producto.detalle|default:"" |truncatechars:70 }}
+                  {% if producto.detalle %}
+                    {{ producto.detalle|truncatechars:70 }}
+                  {% else %}
+                    Ver detalles completos
+                  {% endif %}
                 </div>
 
                 <!-- Botón Comprar -->
+                {% if producto.stock > 0 %}
                 <form method="POST" action="{% url 'agregar_al_carrito' producto.id %}" class="mt-auto">
                   {% csrf_token %}
                   <input type="hidden" name="cantidad" value="1">
@@ -204,6 +209,11 @@
                     <i class="bi bi-cart-plus me-1"></i> Comprar
                   </button>
                 </form>
+                {% else %}
+                <p class="btn btn-secondary disabled w-100 py-2 fs-6 mt-auto" style="cursor: not-allowed;">
+                  <i class="bi bi-x-circle me-1"></i> Sin Stock
+                </p>
+                {% endif %}
               </div>
             </div>
           </div>
